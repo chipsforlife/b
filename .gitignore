@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+.env
+*.env
+serviceAccountKey.json
+*firebase-adminsdk*.json
+*.log
+.DS_Store
+.claude/

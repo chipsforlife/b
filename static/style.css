@@ -1,0 +1,170 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #fdf6f0 0%, #eef2ff 100%);
+    color: #2d2a32;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 4px;
+    font-size: 2.2rem;
+}
+
+.subtitle {
+    text-align: center;
+    color: #6b6470;
+    margin-bottom: 30px;
+}
+
+.add-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.add-form input[type="text"] {
+    flex: 1;
+    min-width: 200px;
+    padding: 12px 14px;
+    border: 1px solid #d8d2e0;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.add-form select {
+    padding: 12px 14px;
+    border: 1px solid #d8d2e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: white;
+}
+
+.add-form button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    background: #6c5ce7;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.add-form button:hover {
+    background: #5847d1;
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border: 2px solid transparent;
+}
+
+.card.favorited {
+    border-color: #ffd166;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.category-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.category-badge.music {
+    background: #e0f7fa;
+    color: #00838f;
+}
+
+.category-badge.visual {
+    background: #fce4ec;
+    color: #ad1457;
+}
+
+.star {
+    color: #ffb400;
+    font-size: 1.2rem;
+}
+
+.card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+    word-break: break-word;
+}
+
+.card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: auto;
+}
+
+.card-actions form {
+    flex: 1;
+}
+
+.favorite-btn,
+.delete-btn {
+    width: 100%;
+    padding: 8px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: opacity 0.2s;
+}
+
+.favorite-btn {
+    background: #ffe8a3;
+    color: #7a5c00;
+}
+
+.delete-btn {
+    background: #ffd6d6;
+    color: #a30000;
+}
+
+.favorite-btn:hover,
+.delete-btn:hover {
+    opacity: 0.8;
+}
+
+.empty {
+    text-align: center;
+    grid-column: 1 / -1;
+    color: #6b6470;
+    padding: 40px;
+}

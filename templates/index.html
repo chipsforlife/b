@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mini Art Inspiration Board</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Mini Art Inspiration Board</h1>
+        <p class="subtitle">Save your favorite music and visual art ideas</p>
+
+        <form action="{{ url_for('add_item') }}" method="POST" class="add-form">
+            <input
+                type="text"
+                name="title"
+                placeholder="Enter an inspiration title..."
+                required
+            >
+            <select name="category">
+                <option value="Music">Music</option>
+                <option value="Visual Art">Visual Art</option>
+            </select>
+            <button type="submit">Add</button>
+        </form>
+
+        <div class="board">
+            {% if items %}
+                {% for item in items %}
+                <div class="card {% if item.favorite %}favorited{% endif %}">
+                    <div class="card-header">
+                        <span class="category-badge {{ 'music' if item.category == 'Music' else 'visual' }}">
+                            {{ item.category }}
+                        </span>
+                        {% if item.favorite %}<span class="star">★</span>{% endif %}
+                    </div>
+                    <p class="card-title">{{ item.title }}</p>
+                    <div class="card-actions">
+                        <form action="{{ url_for('favorite_item', item_id=item.id) }}" method="POST">
+                            <button type="submit" class="favorite-btn">
+                                {% if item.favorite %}Unfavorite{% else %}Favorite{% endif %}
+                            </button>
+                        </form>
+                        <form action="{{ url_for('delete_item', item_id=item.id) }}" method="POST">
+                            <button type="submit" class="delete-btn">Delete</button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p class="empty">No inspiration items yet. Add your first one above!</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
