@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Image Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>🖼️ AI Image Generator</h1>
+        <p class="subtitle">Describe anything, and let AI paint it</p>
+
+        <form id="generate-form" class="generate-form">
+            <textarea
+                id="prompt"
+                placeholder="A cozy reading nook by a rainy window..."
+                required
+            ></textarea>
+            <div class="style-presets" id="style-presets">
+                <button type="button" class="style-btn active" data-suffix="">None</button>
+                <button type="button" class="style-btn" data-suffix="watercolor painting style, soft brush strokes">Watercolor</button>
+                <button type="button" class="style-btn" data-suffix="Studio Ghibli anime style, warm colors, hand-drawn">Ghibli</button>
+                <button type="button" class="style-btn" data-suffix="pixel art style, 16-bit retro game graphics">Pixel Art</button>
+                <button type="button" class="style-btn" data-suffix="oil painting style, thick brush strokes, canvas texture">Oil Painting</button>
+                <button type="button" class="style-btn" data-suffix="photorealistic, high detail, professional photography">Photorealistic</button>
+                <button type="button" class="style-btn" data-suffix="3D render, octane render, cinematic lighting">3D Render</button>
+                <button type="button" class="style-btn" data-suffix="cyberpunk style, neon lights, futuristic city">Cyberpunk</button>
+            </div>
+            <div class="controls">
+                <select id="size">
+                    <option value="1024x1024">Square (1024x1024)</option>
+                    <option value="1024x1536">Portrait (1024x1536)</option>
+                    <option value="1536x1024">Landscape (1536x1024)</option>
+                </select>
+                <button type="submit" id="generate-btn">Generate</button>
+            </div>
+        </form>
+
+        <p id="status" class="status"></p>
+
+        <div id="result" class="result"></div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
