@@ -31,7 +31,9 @@
         <p class="hint">This is a simple placeholder melody because no OpenAI (ChatGPT) API key is connected yet.
             It is not a real ChatGPT composition.</p>
         {% endif %}
-        <div id="score-viewer" class="score-viewer" data-score-url="{{ post.score_url }}"></div>
+        <div id="score-viewer" class="score-viewer" data-score-url="{{ post.score_url }}">
+            <p class="score-loading">Rendering score...</p>
+        </div>
         <a class="cta-btn score-download" href="{{ post.score_url }}" download="{{ post.title }}.musicxml">
             Download score (.musicxml)
         </a>
@@ -66,5 +68,8 @@
 </section>
 {% endblock %}
 {% block scripts %}
+{% if post.score_url %}
+<script defer src="{{ url_for('static', filename='vendor/opensheetmusicdisplay/opensheetmusicdisplay.min.js') }}"></script>
+{% endif %}
 <script type="module" src="{{ url_for('static', filename='js/post_detail.js') }}"></script>
 {% endblock %}

@@ -76,23 +76,27 @@ commentForm.addEventListener("submit", async (event) => {
     }
 });
 
-// Best-effort inline score rendering via OpenSheetMusicDisplay. This is
-// optional polish only - if the CDN can't be reached (offline, blocked
-// network) we just leave the "download .musicxml" link as-is, so this
-// never breaks the rest of the page (comments, playback, etc).
+// Inline score rendering via OpenSheetMusicDisplay (OSMD), served locally
+// from static/vendor so it works offline. OSMD is a UMD bundle loaded by a
+// classic <script defer> tag in post_detail.html, which exposes it as
+// window.opensheetmusicdisplay. If rendering fails, we hide the viewer and
+// the "download .musicxml" link still works.
 const scoreViewer = document.getElementById("score-viewer");
 if (scoreViewer && scoreViewer.dataset.scoreUrl) {
     (async () => {
         try {
-            const osmdModule = await import(
-                "https://cdn.jsdelivr.net/npm/opensheetmusicdisplay@1.8.4/build/opensheetmusicdisplay.min.js"
-            );
-            const OSMD = osmdModule.OpenSheetMusicDisplay || window.opensheetmusicdisplay?.OpenSheetMusicDisplay;
-            const osmd = new OSMD(scoreViewer, { autoResize: true, drawTitle: false });
-            await osmd.load(scoreViewer.dataset.scoreUrl);
+            const OSMD = window.opensheetmusicdisplay && window.opensheetmusicdisplay.OpenSheetMusicDisplay;
+            if (!OSMD) throw new Error("OpenSheetMusicDisplay failed to load");
+            const response = await fetch(scoreViewer.dataset.scoreUrl);
+            if (!response.ok) throw new Error(`Score request failed (status ${response.status})`);
+            const xml = await response.text();
+            scoreViewer.replaceChildren();
+            const osmd = new OSMD(scoreViewer, { autoResize: true, drawTitle: false, backend: "svg" });
+            await osmd.load(xml);
             osmd.render();
         } catch (error) {
-            console.warn("[MoodTune] Could not load the score preview (download still works):", error);
+            scoreViewer.classList.add("hidden");
+            console.warn("[MoodTune] Could not render the score preview (download still works):", error);
         }
     })();
 }

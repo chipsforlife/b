@@ -470,11 +470,13 @@ button[type="submit"]:disabled {
     min-height: 0;
 }
 
-.score-viewer:empty {
-    display: none;
-}
-
 .score-download {
     display: inline-block;
     margin-top: 4px;
+}
+
+.score-loading {
+    color: #555;
+    margin: 0;
+    font-size: 0.9rem;
 }
