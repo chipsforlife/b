@@ -1,14 +1,14 @@
 {% extends "base.html" %}
-{% block title %}MoodTune — AI 음악 생성 커뮤니티{% endblock %}
+{% block title %}MoodTune — AI Music Community{% endblock %}
 {% block content %}
 <section class="hero">
     <h1>🎧 MoodTune</h1>
-    <p class="subtitle">한 줄 프롬프트로 나만의 무드 음악을 만들고 공유해보세요</p>
-    <a class="cta-btn" href="{{ url_for('new_post_page') }}">+ 새 음악 만들기</a>
+    <p class="subtitle">Turn a one-line prompt into your own mood music and share it</p>
+    <a class="cta-btn" href="{{ url_for('new_post_page') }}">+ Create new music</a>
 </section>
 
 {% if query %}
-<p class="search-info">"<strong>{{ query }}</strong>" 검색 결과 {{ posts|length }}건</p>
+<p class="search-info">{{ posts|length }} result(s) for "<strong>{{ query }}</strong>"</p>
 {% endif %}
 
 <div class="post-grid">
@@ -19,7 +19,7 @@
                 {% if post.genre %}<span class="genre-badge">{{ post.genre }}</span>{% endif %}
                 {% if post.mood %}<span class="genre-badge mood-badge">{{ mood_labels.get(post.mood, post.mood) }}</span>{% endif %}
                 <span class="duration-badge">{{ post.duration }}s</span>
-                {% if post.is_demo_audio %}<span class="genre-badge demo-badge">🧪 데모 사운드</span>{% endif %}
+                {% if post.is_demo_audio %}<span class="genre-badge demo-badge">🧪 Demo sound</span>{% endif %}
             </div>
             <h3 class="post-title">{{ post.title }}</h3>
             <p class="post-prompt">{{ post.prompt }}</p>
@@ -34,7 +34,7 @@
         {% endfor %}
     {% else %}
         <p class="empty">
-            {% if query %}검색 결과가 없습니다.{% else %}아직 게시글이 없습니다. 첫 곡을 만들어보세요!{% endif %}
+            {% if query %}No results found.{% else %}No posts yet. Create the first track!{% endif %}
         </p>
     {% endif %}
 </div>

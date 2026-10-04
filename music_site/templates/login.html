@@ -1,23 +1,23 @@
 {% extends "base.html" %}
-{% block title %}로그인 / 회원가입 · MoodTune{% endblock %}
+{% block title %}Log in / Sign up · MoodTune{% endblock %}
 {% block content %}
 <div class="auth-card">
     <div class="auth-tabs">
-        <button type="button" class="tab-btn active" data-tab="login">로그인</button>
-        <button type="button" class="tab-btn" data-tab="signup">회원가입</button>
+        <button type="button" class="tab-btn active" data-tab="login">Log in</button>
+        <button type="button" class="tab-btn" data-tab="signup">Sign up</button>
     </div>
 
     <form id="login-form" class="auth-form">
-        <input type="email" name="email" placeholder="이메일" required>
-        <input type="password" name="password" placeholder="비밀번호" required>
-        <button type="submit">로그인</button>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit">Log in</button>
     </form>
 
     <form id="signup-form" class="auth-form hidden">
-        <input type="text" name="name" placeholder="닉네임" required>
-        <input type="email" name="email" placeholder="이메일" required>
-        <input type="password" name="password" placeholder="비밀번호 (6자 이상)" required minlength="6">
-        <button type="submit">회원가입</button>
+        <input type="text" name="name" placeholder="Nickname" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Password (min. 6 characters)" required minlength="6">
+        <button type="submit">Sign up</button>
     </form>
 
     <p id="auth-status" class="status"></p>

@@ -127,9 +127,9 @@ async function setup() {
         };
     } else {
         console.warn(
-            "[MoodTune] Firebase가 아직 설정되지 않아 데모 모드(로컬 임시 로그인)로 동작합니다. " +
-            "static/js/firebase-config.example.js 를 firebase-config.js 로 복사한 뒤 " +
-            "실제 Firebase 프로젝트 값을 채우면 실제 로그인으로 전환됩니다."
+            "[MoodTune] Firebase is not configured yet, so running in demo mode (temporary local login). " +
+            "Copy static/js/firebase-config.example.js to firebase-config.js and " +
+            "fill in your real Firebase project values to switch to real login."
         );
         moodtuneAuth = createDemoAuth();
     }

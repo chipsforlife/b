@@ -7,41 +7,41 @@
         {% if post.mood %}<span class="genre-badge mood-badge">{{ mood_labels.get(post.mood, post.mood) }}</span>{% endif %}
         {% if post.tempo %}<span class="duration-badge">{{ tempo_labels.get(post.tempo, post.tempo) }}</span>{% endif %}
         <span class="duration-badge">{{ post.duration }}s</span>
-        {% if post.is_demo_audio %}<span class="genre-badge demo-badge">🧪 데모 사운드</span>{% endif %}
+        {% if post.is_demo_audio %}<span class="genre-badge demo-badge">🧪 Demo sound</span>{% endif %}
     </div>
     <h1>{{ post.title }}</h1>
     <p class="post-meta">by {{ post.author_name }}</p>
 
     {% if post.is_demo_audio %}
-    <p class="hint">Hugging Face API 키가 아직 연결되지 않아 임시로 합성된 사운드입니다. 실제
-        Stable Audio 결과가 아닙니다.</p>
+    <p class="hint">This is a temporary synthesized sound because no Hugging Face API key is connected yet.
+        It is not a real Stable Audio result.</p>
     {% endif %}
 
     <audio controls src="{{ post.audio_url }}" class="player"></audio>
 
     <div class="prompt-box">
-        <h3>프롬프트</h3>
+        <h3>Prompt</h3>
         <p>{{ post.prompt }}</p>
     </div>
 
     {% if post.score_url %}
     <div class="score-box">
-        <h3>🎼 오케스트라 악보 (MusicXML)</h3>
+        <h3>🎼 Orchestral score (MusicXML)</h3>
         {% if post.is_demo_score %}
-        <p class="hint">OpenAI(ChatGPT) API 키가 아직 연결되지 않아 임시로 생성된 간단한 멜로디입니다.
-            실제 ChatGPT 작곡 결과가 아닙니다.</p>
+        <p class="hint">This is a simple placeholder melody because no OpenAI (ChatGPT) API key is connected yet.
+            It is not a real ChatGPT composition.</p>
         {% endif %}
         <div id="score-viewer" class="score-viewer" data-score-url="{{ post.score_url }}"></div>
         <a class="cta-btn score-download" href="{{ post.score_url }}" download="{{ post.title }}.musicxml">
-            악보 다운로드 (.musicxml)
+            Download score (.musicxml)
         </a>
-        <p class="hint">MuseScore, Finale, Sibelius 등에서 열어볼 수 있습니다.</p>
+        <p class="hint">Open it in MuseScore, Finale, Sibelius, etc.</p>
     </div>
     {% endif %}
 </article>
 
 <section class="comments" data-post-id="{{ post.id }}">
-    <h3>댓글 ({{ comments|length }})</h3>
+    <h3>Comments ({{ comments|length }})</h3>
 
     <div id="comment-list" class="comment-list">
         {% for comment in comments %}
@@ -50,17 +50,17 @@
             <p class="comment-text">{{ comment.text }}</p>
         </div>
         {% else %}
-        <p class="empty-comments">아직 댓글이 없습니다.</p>
+        <p class="empty-comments">No comments yet.</p>
         {% endfor %}
     </div>
 
     <div id="comment-login-required" class="notice hidden">
-        <p>댓글을 작성하려면 <a href="{{ url_for('login_page') }}">로그인</a>해주세요.</p>
+        <p><a href="{{ url_for('login_page') }}">Log in</a> to leave a comment.</p>
     </div>
 
     <form id="comment-form" class="comment-form hidden">
-        <textarea id="comment-text" placeholder="댓글을 남겨보세요" required maxlength="300"></textarea>
-        <button type="submit">댓글 작성</button>
+        <textarea id="comment-text" placeholder="Leave a comment" required maxlength="300"></textarea>
+        <button type="submit">Post comment</button>
     </form>
     <p id="comment-status" class="status"></p>
 </section>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,8 +10,8 @@
     <header class="topbar">
         <a class="brand" href="{{ url_for('index') }}">🎧 MoodTune</a>
         <form class="search-form" action="{{ url_for('index') }}" method="GET">
-            <input type="text" name="q" placeholder="제목, 프롬프트, 장르로 검색..." value="{{ query|default('') }}">
-            <button type="submit">검색</button>
+            <input type="text" name="q" placeholder="Search by title, prompt, or genre..." value="{{ query|default('') }}">
+            <button type="submit">Search</button>
         </form>
         <nav class="nav-auth" id="nav-auth">
             <!-- filled in by auth.js depending on login state -->
@@ -20,9 +20,9 @@
 
     {% if demo_mode %}
     <div class="demo-banner">
-        🧪 데모 모드로 실행 중입니다 — Firebase 프로젝트가 아직 연결되지 않아 로그인은
-        브라우저에만 저장되는 임시 계정이고, 데이터는 서버 메모리에만 저장됩니다
-        (서버를 재시작하면 초기화됩니다). <code>music_site/README.md</code> 참고.
+        🧪 Running in demo mode — no Firebase project is connected yet, so logins are temporary
+        accounts stored only in your browser, and data is kept only in server memory
+        (it resets when the server restarts). See <code>music_site/README.md</code>.
     </div>
     {% endif %}
 

@@ -47,7 +47,7 @@ commentForm.addEventListener("submit", async (event) => {
 
     const idToken = await window.moodtune.getIdToken();
     if (!idToken) {
-        setStatus("로그인이 필요합니다.", true);
+        setStatus("You need to log in.", true);
         return;
     }
 
@@ -65,14 +65,14 @@ commentForm.addEventListener("submit", async (event) => {
         });
         const data = await response.json();
         if (!response.ok) {
-            throw new Error(data.error || "댓글 작성에 실패했습니다.");
+            throw new Error(data.error || "Failed to post comment.");
         }
 
         appendComment(data);
         commentText.value = "";
         setStatus("");
     } catch (error) {
-        setStatus(`오류: ${error.message}`, true);
+        setStatus(`Error: ${error.message}`, true);
     }
 });
 
@@ -92,7 +92,7 @@ if (scoreViewer && scoreViewer.dataset.scoreUrl) {
             await osmd.load(scoreViewer.dataset.scoreUrl);
             osmd.render();
         } catch (error) {
-            console.warn("[MoodTune] 악보 미리보기를 불러오지 못했습니다 (다운로드는 계속 가능합니다):", error);
+            console.warn("[MoodTune] Could not load the score preview (download still works):", error);
         }
     })();
 }

@@ -1,72 +1,72 @@
 {% extends "base.html" %}
-{% block title %}새 음악 만들기 · MoodTune{% endblock %}
+{% block title %}Create new music · MoodTune{% endblock %}
 {% block content %}
 <div id="login-required" class="notice hidden">
-    <p>음악을 생성하려면 먼저 로그인해주세요.</p>
-    <a class="cta-btn" href="{{ url_for('login_page') }}">로그인 / 회원가입</a>
+    <p>Please log in to generate music.</p>
+    <a class="cta-btn" href="{{ url_for('login_page') }}">Log in / Sign up</a>
 </div>
 
 {% if not hf_configured %}
 <p class="hint" style="text-align:center; margin-bottom: 8px;">
-    ℹ️ Hugging Face API 키가 아직 설정되지 않아, 생성 버튼을 누르면 임시로 합성된 짧은
-    사운드가 대신 만들어집니다. 키를 등록하면 실제 Stable Audio 생성으로 자동 전환됩니다.
+    ℹ️ No Hugging Face API key is set yet, so generating will create a short temporary
+    synthesized sound instead. Add a key to switch to real Stable Audio generation automatically.
 </p>
 {% endif %}
 {% if not openai_configured %}
 <p class="hint" style="text-align:center; margin-bottom: 16px;">
-    ℹ️ OpenAI(ChatGPT) API 키가 아직 설정되지 않아, 오케스트라 악보는 임시로 생성된 간단한
-    멜로디(MusicXML)로 대신 만들어집니다. 키를 등록하면 실제 ChatGPT 작곡으로 자동 전환됩니다.
+    ℹ️ No OpenAI (ChatGPT) API key is set yet, so the orchestral score will be a simple placeholder
+    melody (MusicXML). Add a key to switch to real ChatGPT composition automatically.
 </p>
 {% endif %}
 
 <form id="generate-form" class="generate-form hidden">
-    <label for="title">게시글 제목</label>
-    <input type="text" id="title" name="title" placeholder="예: 비 오는 날의 로파이" required maxlength="100">
+    <label for="title">Post title</label>
+    <input type="text" id="title" name="title" placeholder="e.g. Rainy day lo-fi" required maxlength="100">
 
-    <label for="prompt">프롬프트</label>
-    <textarea id="prompt" name="prompt" placeholder="어떤 분위기의 음악을 원하시나요? 예: 비 오는 날 카페에서 듣는 잔잔한 로파이 재즈"
+    <label for="prompt">Prompt</label>
+    <textarea id="prompt" name="prompt" placeholder="What kind of music do you want? e.g. Calm lo-fi jazz for a rainy day at a café"
         required maxlength="500"></textarea>
 
-    <label>장르 (선택)</label>
+    <label>Genre (optional)</label>
     <div class="style-presets" id="genre-presets">
-        <button type="button" class="style-btn active" data-genre="">선택 안 함</button>
+        <button type="button" class="style-btn active" data-genre="">None</button>
         {% for genre in genres %}
         <button type="button" class="style-btn" data-genre="{{ genre }}">{{ genre }}</button>
         {% endfor %}
     </div>
 
-    <label for="duration">길이: <span id="duration-value">{{ default_duration }}</span>초</label>
+    <label for="duration">Length: <span id="duration-value">{{ default_duration }}</span>s</label>
     <input type="range" id="duration" name="duration" min="{{ min_duration }}" max="{{ max_duration }}"
         value="{{ default_duration }}">
 
     <hr class="section-divider">
 
-    <label for="mood">오케스트라 악보 무드 (필수)</label>
+    <label for="mood">Orchestral score mood (required)</label>
     <select id="mood" name="mood" required>
-        <option value="" disabled selected>무드를 선택해주세요</option>
+        <option value="" disabled selected>Choose a mood</option>
         {% for mood in moods %}
         <option value="{{ mood.value }}">{{ mood.label }}</option>
         {% endfor %}
     </select>
 
-    <label>템포</label>
+    <label>Tempo</label>
     <div class="style-presets" id="tempo-presets">
         {% for tempo in tempos %}
         <button type="button" class="style-btn{% if tempo.value == default_tempo %} active{% endif %}"
             data-tempo="{{ tempo.value }}">{{ tempo.label }}</button>
         {% endfor %}
     </div>
-    <p class="hint">선택한 무드와 템포로 ChatGPT가 오케스트라 악보(MusicXML)도 함께 만들어줍니다.</p>
+    <p class="hint">ChatGPT will also compose an orchestral score (MusicXML) using the mood and tempo you pick.</p>
 
-    <button type="submit" id="generate-btn">🎵 음악 + 악보 생성하기</button>
+    <button type="submit" id="generate-btn">🎵 Generate music + score</button>
 </form>
 
 <p id="status" class="status"></p>
 
 <div id="preview" class="preview hidden">
-    <h3>미리 듣기</h3>
+    <h3>Preview</h3>
     <audio id="preview-audio" controls></audio>
-    <p class="hint">저장이 완료되었습니다. 게시글 상세 페이지로 이동합니다...</p>
+    <p class="hint">Saved! Taking you to the post page...</p>
 </div>
 {% endblock %}
 {% block scripts %}

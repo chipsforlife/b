@@ -8,16 +8,16 @@ function renderNav(user) {
     if (user) {
         const name = document.createElement("span");
         name.className = "nav-username";
-        name.textContent = user.displayName || user.email || "사용자";
+        name.textContent = user.displayName || user.email || "User";
 
         const newPostLink = document.createElement("a");
         newPostLink.href = "/new";
         newPostLink.className = "nav-link";
-        newPostLink.textContent = "새 글쓰기";
+        newPostLink.textContent = "New post";
 
         const logoutBtn = document.createElement("button");
         logoutBtn.className = "nav-btn";
-        logoutBtn.textContent = "로그아웃";
+        logoutBtn.textContent = "Log out";
         logoutBtn.addEventListener("click", async () => {
             await window.moodtune.signOut(window.moodtune.auth);
             window.location.href = "/";
@@ -28,7 +28,7 @@ function renderNav(user) {
         const loginLink = document.createElement("a");
         loginLink.href = "/login";
         loginLink.className = "nav-link";
-        loginLink.textContent = "로그인 / 회원가입";
+        loginLink.textContent = "Log in / Sign up";
         navAuth.append(loginLink);
     }
 }

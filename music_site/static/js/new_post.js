@@ -57,19 +57,19 @@ form.addEventListener("submit", async (event) => {
 
     const idToken = await window.moodtune.getIdToken();
     if (!idToken) {
-        setStatus("로그인이 필요합니다.", true);
+        setStatus("You need to log in.", true);
         return;
     }
 
     if (!moodSelect.value) {
-        setStatus("오케스트라 악보의 무드를 선택해주세요.", true);
+        setStatus("Please choose a mood for the orchestral score.", true);
         moodSelect.focus();
         return;
     }
 
     generateBtn.disabled = true;
-    generateBtn.textContent = "생성 중...";
-    setStatus("AI가 음악과 악보를 만들고 있어요 — 최대 1~2분 정도 걸릴 수 있습니다.");
+    generateBtn.textContent = "Generating...";
+    setStatus("AI is composing your music and score — this can take up to 1–2 minutes.");
     previewEl.classList.add("hidden");
 
     try {
@@ -91,7 +91,7 @@ form.addEventListener("submit", async (event) => {
 
         const data = await response.json();
         if (!response.ok) {
-            throw new Error(data.error || "음악 생성에 실패했습니다.");
+            throw new Error(data.error || "Music generation failed.");
         }
 
         setStatus("");
@@ -101,9 +101,9 @@ form.addEventListener("submit", async (event) => {
             window.location.href = `/post/${data.id}`;
         }, 1500);
     } catch (error) {
-        setStatus(`오류: ${error.message}`, true);
+        setStatus(`Error: ${error.message}`, true);
     } finally {
         generateBtn.disabled = false;
-        generateBtn.textContent = "🎵 음악 + 악보 생성하기";
+        generateBtn.textContent = "🎵 Generate music + score";
     }
 });

@@ -47,24 +47,24 @@ GENRE_PRESETS = ["Lo-fi", "Ambient", "Piano", "Orchestral", "Synthwave", "Cinema
 # the new-post page. Each also drives the local placeholder score (scale +
 # tempo + dynamic) when OPENAI_API_KEY isn't configured yet.
 MOOD_PRESETS = [
-    {"value": "Happy", "label": "밝고 경쾌하게"},
-    {"value": "Sad", "label": "슬프고 잔잔하게"},
-    {"value": "Epic", "label": "웅장하고 영웅적으로"},
-    {"value": "Mysterious", "label": "신비롭게"},
-    {"value": "Peaceful", "label": "평화롭게"},
-    {"value": "Tense", "label": "긴장감 있게"},
-    {"value": "Triumphant", "label": "승리에 찬 팡파르처럼"},
-    {"value": "Melancholic", "label": "애수 어린"},
-    {"value": "Playful", "label": "장난스럽게"},
-    {"value": "Dark", "label": "어둡고 무겁게"},
+    {"value": "Happy", "label": "Bright & upbeat"},
+    {"value": "Sad", "label": "Sad & gentle"},
+    {"value": "Epic", "label": "Epic & heroic"},
+    {"value": "Mysterious", "label": "Mysterious"},
+    {"value": "Peaceful", "label": "Peaceful"},
+    {"value": "Tense", "label": "Tense"},
+    {"value": "Triumphant", "label": "Triumphant fanfare"},
+    {"value": "Melancholic", "label": "Melancholic"},
+    {"value": "Playful", "label": "Playful"},
+    {"value": "Dark", "label": "Dark & heavy"},
 ]
 MOOD_VALUES = {m["value"] for m in MOOD_PRESETS}
 MOOD_LABELS = {m["value"]: m["label"] for m in MOOD_PRESETS}
 
 TEMPO_PRESETS = [
-    {"value": "Slow", "label": "느리게", "bpm": 66},
-    {"value": "Moderate", "label": "보통", "bpm": 100},
-    {"value": "Fast", "label": "빠르게", "bpm": 138},
+    {"value": "Slow", "label": "Slow", "bpm": 66},
+    {"value": "Moderate", "label": "Moderate", "bpm": 100},
+    {"value": "Fast", "label": "Fast", "bpm": 138},
 ]
 TEMPO_BPM = {t["value"]: t["bpm"] for t in TEMPO_PRESETS}
 TEMPO_LABELS = {t["value"]: t["label"] for t in TEMPO_PRESETS}
@@ -222,7 +222,7 @@ def get_current_user():
         return {
             "uid": payload.get("uid", "demo"),
             "email": payload.get("email", ""),
-            "name": payload.get("displayName") or payload.get("email", "익명"),
+            "name": payload.get("displayName") or payload.get("email", "Anonymous"),
         }
 
     try:
@@ -232,7 +232,7 @@ def get_current_user():
     return {
         "uid": decoded.get("uid"),
         "email": decoded.get("email", ""),
-        "name": decoded.get("name") or decoded.get("email", "익명"),
+        "name": decoded.get("name") or decoded.get("email", "Anonymous"),
     }
 
 
@@ -256,7 +256,7 @@ def serialize_post(data):
         "tempo": data.get("tempo"),
         "score_url": data.get("score_url"),
         "is_demo_score": data.get("is_demo_score", False),
-        "author_name": data.get("author_name", "익명"),
+        "author_name": data.get("author_name", "Anonymous"),
         "author_uid": data.get("author_uid"),
         "comment_count": data.get("comment_count", 0),
         "created_at": created_at.isoformat() if hasattr(created_at, "isoformat") else None,
@@ -268,7 +268,7 @@ def serialize_comment(data):
     return {
         "id": data["id"],
         "text": data.get("text", ""),
-        "author_name": data.get("author_name", "익명"),
+        "author_name": data.get("author_name", "Anonymous"),
         "author_uid": data.get("author_uid"),
         "created_at": created_at.isoformat() if hasattr(created_at, "isoformat") else None,
     }
@@ -347,7 +347,7 @@ def generate_audio(prompt, genre, duration):
     try:
         response = requests.post(endpoint, headers=headers, json=payload, timeout=180)
     except requests.RequestException as exc:
-        raise RuntimeError(f"음악 생성 서버 호출에 실패했습니다: {exc}") from exc
+        raise RuntimeError(f"Failed to reach the music generation server: {exc}") from exc
 
     content_type = response.headers.get("Content-Type", "")
     if response.status_code != 200 or not content_type.startswith("audio"):
@@ -357,7 +357,7 @@ def generate_audio(prompt, genre, duration):
             message = error_json.get("error") or error_json.get("message")
         except ValueError:
             pass
-        raise RuntimeError(message or f"음악 생성에 실패했습니다 (status {response.status_code}).")
+        raise RuntimeError(message or f"Music generation failed (status {response.status_code}).")
 
     return response.content, content_type or "audio/wav", False
 
@@ -496,16 +496,16 @@ def generate_musicxml(prompt, mood, tempo_label, genre, title):
             temperature=0.8,
         )
     except OpenAIError as exc:
-        raise RuntimeError(f"악보 생성(ChatGPT) 호출에 실패했습니다: {exc}") from exc
+        raise RuntimeError(f"Score generation (ChatGPT) request failed: {exc}") from exc
 
     xml_text = _strip_code_fence(response.choices[0].message.content or "")
     if not xml_text:
-        raise RuntimeError("ChatGPT가 빈 응답을 반환했습니다.")
+        raise RuntimeError("ChatGPT returned an empty response.")
 
     try:
         ET.fromstring(xml_text.encode("utf-8"))
     except ET.ParseError as exc:
-        raise RuntimeError(f"ChatGPT가 생성한 악보(MusicXML)가 올바르지 않습니다: {exc}") from exc
+        raise RuntimeError(f"The score (MusicXML) generated by ChatGPT is invalid: {exc}") from exc
 
     return xml_text, False
 
@@ -574,7 +574,7 @@ def post_detail(post_id):
 def create_post_route():
     user = get_current_user()
     if not user:
-        return jsonify_error(401, "로그인이 필요합니다.")
+        return jsonify_error(401, "You need to log in.")
 
     data = request.get_json(silent=True) or {}
     title = (data.get("title") or "").strip()
@@ -589,15 +589,15 @@ def create_post_route():
     duration = max(MIN_DURATION, min(MAX_DURATION, duration))
 
     if not title:
-        return jsonify_error(400, "제목을 입력해주세요.")
+        return jsonify_error(400, "Please enter a title.")
     if len(title) > 100:
-        return jsonify_error(400, "제목은 100자 이내로 입력해주세요.")
+        return jsonify_error(400, "Title must be 100 characters or fewer.")
     if not prompt:
-        return jsonify_error(400, "프롬프트를 입력해주세요.")
+        return jsonify_error(400, "Please enter a prompt.")
     if len(prompt) > 500:
-        return jsonify_error(400, "프롬프트는 500자 이내로 입력해주세요.")
+        return jsonify_error(400, "Prompt must be 500 characters or fewer.")
     if mood not in MOOD_VALUES:
-        return jsonify_error(400, "무드를 선택해주세요.")
+        return jsonify_error(400, "Please choose a mood.")
     if tempo not in TEMPO_BPM:
         tempo = DEFAULT_TEMPO
 
@@ -646,17 +646,17 @@ def create_post_route():
 def add_comment_route(post_id):
     user = get_current_user()
     if not user:
-        return jsonify_error(401, "로그인이 필요합니다.")
+        return jsonify_error(401, "You need to log in.")
 
     if not get_post(post_id):
-        return jsonify_error(404, "게시글을 찾을 수 없습니다.")
+        return jsonify_error(404, "Post not found.")
 
     data = request.get_json(silent=True) or {}
     text = (data.get("text") or "").strip()
     if not text:
-        return jsonify_error(400, "댓글 내용을 입력해주세요.")
+        return jsonify_error(400, "Please enter a comment.")
     if len(text) > 300:
-        return jsonify_error(400, "댓글은 300자 이내로 입력해주세요.")
+        return jsonify_error(400, "Comment must be 300 characters or fewer.")
 
     comment_id = add_comment(post_id, {
         "text": text,
