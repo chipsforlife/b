@@ -10,3 +10,8 @@ serviceAccountKey.json
 *.log
 .DS_Store
 .claude/
+
+# music_site
+music_site/static/js/firebase-config.js
+music_site/static/generated/*
+!music_site/static/generated/.gitkeep

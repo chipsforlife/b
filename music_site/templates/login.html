@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}로그인 / 회원가입 · MoodTune{% endblock %}
+{% block content %}
+<div class="auth-card">
+    <div class="auth-tabs">
+        <button type="button" class="tab-btn active" data-tab="login">로그인</button>
+        <button type="button" class="tab-btn" data-tab="signup">회원가입</button>
+    </div>
+
+    <form id="login-form" class="auth-form">
+        <input type="email" name="email" placeholder="이메일" required>
+        <input type="password" name="password" placeholder="비밀번호" required>
+        <button type="submit">로그인</button>
+    </form>
+
+    <form id="signup-form" class="auth-form hidden">
+        <input type="text" name="name" placeholder="닉네임" required>
+        <input type="email" name="email" placeholder="이메일" required>
+        <input type="password" name="password" placeholder="비밀번호 (6자 이상)" required minlength="6">
+        <button type="submit">회원가입</button>
+    </form>
+
+    <p id="auth-status" class="status"></p>
+</div>
+{% endblock %}
+{% block scripts %}
+<script type="module" src="{{ url_for('static', filename='js/login.js') }}"></script>
+{% endblock %}

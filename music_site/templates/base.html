@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MoodTune{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <a class="brand" href="{{ url_for('index') }}">🎧 MoodTune</a>
+        <form class="search-form" action="{{ url_for('index') }}" method="GET">
+            <input type="text" name="q" placeholder="제목, 프롬프트, 장르로 검색..." value="{{ query|default('') }}">
+            <button type="submit">검색</button>
+        </form>
+        <nav class="nav-auth" id="nav-auth">
+            <!-- filled in by auth.js depending on login state -->
+        </nav>
+    </header>
+
+    {% if demo_mode %}
+    <div class="demo-banner">
+        🧪 데모 모드로 실행 중입니다 — Firebase 프로젝트가 아직 연결되지 않아 로그인은
+        브라우저에만 저장되는 임시 계정이고, 데이터는 서버 메모리에만 저장됩니다
+        (서버를 재시작하면 초기화됩니다). <code>music_site/README.md</code> 참고.
+    </div>
+    {% endif %}
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <script type="module" src="{{ url_for('static', filename='js/firebase-config.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/firebase-init.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/auth.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
